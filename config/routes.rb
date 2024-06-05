@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'expenses/index'
+  get 'expenses/create'
+  get 'expenses/update'
   get 'auth/login'
   get 'auth/logout'
   get 'auth/callback'
