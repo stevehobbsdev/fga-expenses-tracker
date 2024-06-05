@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Authentication
+
   before_action :check_session
 
   private
 
   def check_session
-    Rails.logger.debug 'Session is not active'
+    return do_login unless logged_in?
+
+    @session = user_session
+    @user = User.find_by(sub: @session)
   end
 end
