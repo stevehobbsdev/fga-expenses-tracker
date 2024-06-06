@@ -8,8 +8,9 @@ class ApplicationController < ActionController::Base
   private
 
   def check_session
+    Rails.logger.debug session[:user_session]
     return do_login unless logged_in?
-
+   
     sub = user_session
     @user = User.find_by sub:
   end

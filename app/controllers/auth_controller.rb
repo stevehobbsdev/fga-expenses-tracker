@@ -4,7 +4,7 @@ class AuthController < ApplicationController
   include Authentication
 
   skip_before_action :verify_authenticity_token, only: :callback
-  skip_before_action :check_session, only: :callback
+  skip_before_action :check_session
 
   def login; end
 

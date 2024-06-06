@@ -63,7 +63,12 @@ module Authentication
 
     # Create a user if not available
     user = User.find_by(sub:)
-    User.create(sub:, email:, name:, id_token:) unless user
+
+    if user
+      user.update id_token:
+    else
+      User.create(sub:, email:, name:, id_token:)
+    end
 
     # TODO: Add the user to FGA
 
