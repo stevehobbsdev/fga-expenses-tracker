@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   def check_session
     return do_login unless logged_in?
 
-    @session = user_session
-    @user = User.find_by(sub: @session)
+    sub = user_session
+    @user = User.find_by sub:
   end
 end

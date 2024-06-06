@@ -59,14 +59,17 @@ module Authentication
 
     # This will throw an error if not valid
     client.validate_id_token(id_token, nonce: transaction[:nonce])
-    decoded_token = JWT.decode(id_token, nil, false)
+    JWT.decode(id_token, nil, false)[0].symbolize_keys => {sub:, email:, name:}
 
-    # Create a user
-    
+    # Create a user if not available
+    user = User.find_by(sub:)
+    User.create(sub:, email:, name:) unless user
 
     # TODO: Add the user to FGA
 
-    session[:user_session] = decoded_token[0]['sub']
+    # TODO: Make this longer lasting than just session
+    session[:user_session] = sub
+    user
   end
 
   def logged_in?
