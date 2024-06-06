@@ -44,8 +44,6 @@ module Authentication
       redirect_uri: auth_callback_url
     }
 
-    Rails.logger.debug token_params
-
     response = HTTParty.post("#{base_uri}/oauth/token", { body: token_params }).parsed_response
 
     raise response['error'] if response['error']
