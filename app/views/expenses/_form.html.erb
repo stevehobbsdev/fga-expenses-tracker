@@ -1,0 +1,18 @@
+<%
+  input_classes = "p-2 rounded-lg border border-grey-300 focus:outline-blue-500 text-gray-800"
+  label_classes = "block mb-2 text-gray-800 text-sm"
+%>
+
+<%= form_with model: @expense do |form| %>
+  <div class="mb-5">
+    <%= form.label :amount, 'Amount:', class: label_classes %>
+    <%= form.number_field :amount, class: input_classes, placeholder: '0.00', required: true %>
+  </div>
+  <div class="mb-5">
+    <%= form.label :description, 'Description:', class: label_classes %>
+    <%= form.text_area :description, class: input_classes, rows: 3, cols: 30, placeholder: 'Describe the expense..', required: true %>
+  </div>
+  <div>
+    <%= form.submit 'Save', class: 'p-2 rounded text-white bg-blue-500' %>
+  </div>
+<% end %>

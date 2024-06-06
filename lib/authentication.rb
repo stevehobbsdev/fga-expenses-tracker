@@ -4,6 +4,11 @@ require 'httparty'
 require 'jwt'
 
 module Authentication
+  #
+  # Performs the login process by generating the necessary parameters,
+  # constructing the authorization URL, and redirecting the user to it.
+  #
+  # @return [void]
   def do_login
     state = SecureRandom.hex(32)
     nonce = SecureRandom.hex(32)
@@ -27,6 +32,14 @@ module Authentication
     redirect_to url, allow_other_host: true
   end
 
+  # Handles the authorization callback by validating the state parameter,
+  # exchanging the authorization code for an access token, validating the ID
+  # token, and creating or updating the user's session.
+  #
+  # @param params [Hash] The parameters received in the authorization callback.
+  # @return [User] The user object associated with the session.
+  # @raise [RuntimeError] If the state parameter does not match the stored state.
+  # @raise [RuntimeError] If an error occurs during the token exchange.
   def handle_auth_callback(params)
     transaction = JSON.parse(session[:auth_transaction], symbolize_names: true)
     raise 'State mismatch' if transaction[:state] != params[:state]
@@ -77,14 +90,40 @@ module Authentication
     user
   end
 
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+
+  # Determines if a user is currently logged in.
+  #
+  # Returns:
+  # - true if the user is logged in
+  # - false if the user is not logged in
+  # Determines if a user is currently logged in.
+  #
+  # Returns:
+  # - true if the user is logged in, false otherwise.
   def logged_in?
     !!user_session
   end
 
+  #
+  # Returns the user session stored in the session hash.
+  #
+  # @return [Object] the user session object
   def user_session
     session[:user_session]
   end
 
+  # Public: Removes the user session and signs out of the IdP.
+  #
+  # Examples
+  #
+  #   remove_session
+  #
+  # Raises
+  #
+  # - RuntimeError: If no user is found.
+  #
+  # Returns nothing.
   def remove_session
     sub = user_session
     user = User.find_by(sub:)
@@ -102,6 +141,11 @@ module Authentication
     redirect_to "#{base_uri}/oidc/logout?#{logout_params.to_query}", allow_other_host: true
   end
 
+  # Returns the base URI for authentication.
+  #
+  # The base URI is constructed using the `AUTH0_DOMAIN` environment variable.
+  #
+  # @return [String] The base URI for authentication.
   def base_uri
     "https://#{ENV.fetch('AUTH0_DOMAIN')}"
   end
