@@ -8,7 +8,9 @@ class AuthController < ApplicationController
 
   def login; end
 
-  def logout; end
+  def logout
+    remove_session
+  end
 
   def callback
     handle_auth_callback(params)

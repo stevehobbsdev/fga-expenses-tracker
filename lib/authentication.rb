@@ -63,7 +63,7 @@ module Authentication
 
     # Create a user if not available
     user = User.find_by(sub:)
-    User.create(sub:, email:, name:) unless user
+    User.create(sub:, email:, name:, id_token:) unless user
 
     # TODO: Add the user to FGA
 
@@ -78,6 +78,23 @@ module Authentication
 
   def user_session
     session[:user_session]
+  end
+
+  def remove_session
+    sub = user_session
+    user = User.find_by(sub:)
+
+    raise 'No user' unless user
+
+    session.delete :user_session
+
+    # Sign out of the IdP
+    logout_params = {
+      post_logout_redirect_uri: root_url,
+      id_token_hint: user.id_token
+    }
+
+    redirect_to "#{base_uri}/oidc/logout?#{logout_params.to_query}", allow_other_host: true
   end
 
   def base_uri

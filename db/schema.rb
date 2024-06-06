@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_06_101336) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_06_104916) do
   create_table "expenses", force: :cascade do |t|
     t.float "amount"
     t.text "description"
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_06_101336) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "id_token"
     t.index ["sub"], name: "index_users_on_sub", unique: true
   end
 
