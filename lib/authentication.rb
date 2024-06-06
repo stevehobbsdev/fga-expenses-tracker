@@ -61,6 +61,11 @@ module Authentication
     client.validate_id_token(id_token, nonce: transaction[:nonce])
     decoded_token = JWT.decode(id_token, nil, false)
 
+    # Create a user
+    
+
+    # TODO: Add the user to FGA
+
     session[:user_session] = decoded_token[0]['sub']
   end
 
