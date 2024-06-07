@@ -1,0 +1,4 @@
+development:
+  store_id: <%= ENV.fetch('FGA_STORE_ID', nil) %>
+  model_id: <%= ENV.fetch('FGA_MODEL_ID', nil) %>
+  api_url: http://localhost:8080

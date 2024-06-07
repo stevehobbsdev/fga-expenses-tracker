@@ -111,6 +111,7 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     domain_name (0.6.20240107)
+    dotenv (3.1.2)
     drb (2.2.1)
     erubi (1.12.0)
     globalid (1.2.1)
@@ -349,6 +350,7 @@ DEPENDENCIES
   capybara
   cssbundling-rails
   debug
+  dotenv
   httparty (~> 0.22.0)
   jbuilder
   jsbundling-rails

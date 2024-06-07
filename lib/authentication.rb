@@ -90,8 +90,6 @@ module Authentication
     user
   end
 
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-
   # Determines if a user is currently logged in.
   #
   # Returns:

@@ -1,0 +1,15 @@
+model
+  schema 1.1
+
+type user
+  relations
+    define manager: [user]
+
+type team
+  relations
+    define members: [user]
+
+type expense
+  relations
+    define owner: [user]
+    define approver: [team#members] or manager from owner
