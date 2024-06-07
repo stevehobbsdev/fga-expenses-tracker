@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   resources :expenses, only: %i[index edit update new create destroy]
+  resources :users
 
   get 'auth/login'
   get 'auth/logout'

@@ -6,34 +6,29 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
 
-    <%= link_to 'Create new', new_expense_path %>
+    <%= link_to 'Create', new_expense_path %>
   </div>
 </div>
 
-<%
-  header_row_class = 'p-3 text-left text-sm font-medium text-gray-500 border-b border-gray-200'
-  table_row_class = 'px-3 py-4 text-left text-sm font-normal text-gray-600 border-b border-gray-100'
-%>
-
 <% if @expenses.any? %>
-  <div class="rounded-lg overflow-auto bg-gray-100 ">
+  <div class="rounded-lg overflow-auto bg-gray-100">
     <table class="table-auto w-full mt-5 border-collapse">
       <thead>
         <tr>
-        <th class="<%= header_row_class %>">Amount</th>
-        <th class="<%= header_row_class %>">Description</th>
-        <th class="<%= header_row_class %>">Created</th>
-        <th class="<%= header_row_class %>">Actions</th>
+        <th class="<%= default_table_header_classes %>">Amount</th>
+        <th class="<%= default_table_header_classes %>">Description</th>
+        <th class="<%= default_table_header_classes %>">Created</th>
+        <th class="<%= default_table_header_classes %>">Actions</th>
         </tr>
       </thead>
       </thead>
       <tbody class="bg-white">
         <% @expenses.each do |expense| %>
-          <tr class="<%= table_row_class %>">
-            <td class="<%= table_row_class %>"><%= number_to_currency(expense.amount) %></td>
-            <td class="<%= table_row_class %>"><%= expense.description %></td>
-            <td class="<%= table_row_class %>"><%= time_ago_in_words(expense.created_at) %> ago</td>
-            <td class="<%= table_row_class %>">
+          <tr>
+            <td class="<%= default_table_row_classes %>"><%= number_to_currency(expense.amount) %></td>
+            <td class="<%= default_table_row_classes %>"><%= expense.description %></td>
+            <td class="<%= default_table_row_classes %>"><%= time_ago_in_words(expense.created_at) %> ago</td>
+            <td class="<%= default_table_row_classes %>">
               <%= link_to 'Edit', edit_expense_path(expense.id), class: 'p-2 mr-3 bg-gray-100 text-slate-500 shadow rounded' %>
             </td>
           </tr>

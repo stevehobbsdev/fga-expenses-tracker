@@ -1,0 +1,29 @@
+<h1 class="text-3xl text-gray-500 font-light mr-5">Users</h1>
+
+<div class="rounded-lg bg-gray-100 overflow-auto mt-10">
+  <table class="table-auto w-full mt-5 border-collapse">
+    <thead>
+      <tr>
+        <th class="<%= default_table_header_classes %>">Name</th>
+        <th class="<%= default_table_header_classes %>">Email</th>
+        <th class="<%= default_table_header_classes %>">Id</th>
+        <th class="<%= default_table_header_classes %>">Role</th>
+        <th class="<%= default_table_header_classes %>">Manager</th>
+        <th class="<%= default_table_header_classes %>">Actions</th>
+      </tr>
+      </tr>
+    </thead>
+    <tbody class="bg-white">
+      <% @users.each do |user| %>
+        <tr>
+          <td class="<%= default_table_row_classes %>"><%= user.name %></td>
+          <td class="<%= default_table_row_classes %>"><%= user.email %></td>
+          <td class="<%= default_table_row_classes %>"><%= user.sub %></td>
+          <td class="<%= default_table_row_classes %>"></td>
+          <td class="<%= default_table_row_classes %>"></td>
+          <td class="<%= default_table_row_classes %>">Edit</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

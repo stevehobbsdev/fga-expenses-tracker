@@ -1,8 +1,16 @@
 <div class="bg-slate-800 text-white p-10 mb-10">
   <div class="flex container mx-auto">
-    <h1 class="grow"><%= link_to 'WorkNight', root_path %></h1>
-    <div>
-      Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>
+    <div class="grow flex">
+      <h1><%= link_to 'WorkNight', root_path, class: 'font-bold mr-5' %></h1>
+      <span class="mr-5 font-bold">|</span>
+      <%= link_to 'My Expenses', expenses_path, class: 'block mr-3' %>
+      <%= link_to 'Users', users_path, class: 'block' %>
+    </div>
+    <div class="flex items-center">
+      
+      <div>
+        Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>
+      </div>
     </div>
   </div>
 </div>
