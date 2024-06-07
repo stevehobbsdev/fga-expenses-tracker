@@ -18,7 +18,7 @@ class ExpensesController < ApplicationController
     @user.expenses << @expense
     @user.save
 
-    if expense.valid?
+    if @expense.valid?
       redirect_to expenses_path
     else
       render :new
@@ -34,6 +34,11 @@ class ExpensesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    Expense.delete(params[:id])
+    redirect_to expenses_path
   end
 
   private

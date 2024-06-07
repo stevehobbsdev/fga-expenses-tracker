@@ -14,5 +14,6 @@
   </div>
   <div>
     <%= form.submit 'Save', class: 'p-2 rounded text-white bg-blue-500' %>
+    <%= link_to 'Delete', @expense, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'p-2 rounded text-white bg-red-500' %>
   </div>
 <% end %>
