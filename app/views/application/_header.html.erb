@@ -2,7 +2,7 @@
   <div class="flex container mx-auto">
     <h1 class="grow"><%= link_to 'WorkNight', root_path %></h1>
     <div>
-      Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false } %>
+      Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>
     </div>
   </div>
 </div>
