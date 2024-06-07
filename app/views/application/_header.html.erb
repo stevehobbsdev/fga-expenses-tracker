@@ -1,5 +1,5 @@
 <div class="bg-slate-800 text-white p-10 mb-10">
-  <div class="flex">
+  <div class="flex container mx-auto">
     <h1 class="grow"><%= link_to 'WorkNight', root_path %></h1>
     <div>
       Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false } %>
