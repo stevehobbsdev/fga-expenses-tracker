@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Tasks relating to FGA management'
 
 namespace :fga do

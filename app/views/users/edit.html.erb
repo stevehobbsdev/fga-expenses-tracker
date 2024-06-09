@@ -31,8 +31,16 @@
         <%= form.label :role, 'Manager', class: label_class %>
         <%= form.select(
           :manager_id,
-          @possible_managers.filter {|m| m.id != @user.id }.collect {|m| [m.name, m.id] }, 
+          @managers,
           { include_blank: 'No manager' },
+          class: input_class) %>
+      </div>
+      <div class="<%= group_class %> flex flex-col">
+        <%= form.label :department, 'Department', class: label_class %>
+        <%= form.select(
+          :department_id,
+          @departments,
+          {},
           class: input_class) %>
       </div>
     </div>

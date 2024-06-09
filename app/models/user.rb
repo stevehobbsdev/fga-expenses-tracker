@@ -3,4 +3,5 @@
 class User < ApplicationRecord
   has_many :expenses, dependent: :destroy
   belongs_to :manager, class_name: 'User', optional: true
+  belongs_to :department, optional: true
 end

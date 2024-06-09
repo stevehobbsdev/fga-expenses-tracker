@@ -5,10 +5,14 @@ class UsersController < ApplicationController
     @users = User.all
     @user_memo = @users.index_by(&:id)
   end
-  
+
   def edit
     @user = User.find(params[:id])
-    @possible_managers = User.where(role: 'manager')
+    @managers = User.where(role: 'manager')
+                    .filter { |m| m.id != @user.id && m.department_id == @user.department_id }
+                    .collect { |m| [m.name, m.id] }
+
+    @departments = Department.all.collect { |d| [d.name, d.id] }
   end
 
   def update
@@ -25,6 +29,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :role, :manager_id)
+    params.require(:user).permit(:name, :role, :manager_id, :department_id)
   end
 end
