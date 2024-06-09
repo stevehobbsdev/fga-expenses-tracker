@@ -9,19 +9,19 @@
         <th class="<%= default_table_header_classes %>">Id</th>
         <th class="<%= default_table_header_classes %>">Team</th>
         <th class="<%= default_table_header_classes %>">Manager</th>
-        <th class="<%= default_table_header_classes %>">Actions</th>
       </tr>
       </tr>
     </thead>
     <tbody class="bg-white">
       <% @users.each do |user| %>
         <tr>
-          <td class="<%= default_table_row_classes %>"><%= user.name %></td>
+          <td class="<%= default_table_row_classes %> font-semibold">
+            <%= user.name %>
+          </td>
           <td class="<%= default_table_row_classes %>"><%= user.email %></td>
           <td class="<%= default_table_row_classes %>"><%= user.sub %></td>
           <td class="<%= default_table_row_classes %>"></td>
-          <td class="<%= default_table_row_classes %>"></td>
-          <td class="<%= default_table_row_classes %>">Edit</td>
+          <td class="<%= default_table_row_classes %>"><%= user.manager_id ? @user_memo[user.manager_id].name : '-' %></td>
         </tr>
       <% end %>
     </tbody>

@@ -73,7 +73,7 @@ module Authentication
     # This will throw an error if not valid
     client.validate_id_token(id_token, nonce: transaction[:nonce])
     JWT.decode(id_token, nil, false)[0].symbolize_keys => {sub:, email:, name:}
-
+    Rails.logger.debug(id_token)
     # Create a user if not available
     user = User.find_by(sub:)
 
@@ -145,6 +145,6 @@ module Authentication
   #
   # @return [String] The base URI for authentication.
   def base_uri
-    "https://#{ENV.fetch('AUTH0_DOMAIN')}"
+    "https://#{ENV.fetch('AUTH0_DOMAIN', nil)}"
   end
 end

@@ -4,7 +4,13 @@ module FgaClient
   def stores
     uri = uri('/stores')
     Rails.logger.debug(uri)
-    HTTParty.get(uri)
+    HTTParty.get(uri).deep_symbolize_keys
+  end
+
+  def delete_store(store_id)
+    uri = uri(store_path(store_id))
+    Rails.logger.debug(uri)
+    HTTParty.delete(uri)
   end
 
   private
@@ -14,10 +20,10 @@ module FgaClient
   end
 
   def uri(path)
-    "#{base_uri}#{path}"
+    "#{fga_base_uri}#{path}"
   end
 
-  def base_uri
+  def fga_base_uri
     config[:api_url]
   end
 
