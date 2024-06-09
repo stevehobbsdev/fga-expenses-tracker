@@ -17,6 +17,9 @@
         <tr>
           <td class="<%= default_table_row_classes %> font-semibold">
             <%= link_to user.name, edit_user_path(user), class: 'text-blue-500 hover:underline' %>
+            <% if @authenticated_user.id == user.id %>
+              (me)
+            <% end %>
           </td>
           <td class="<%= default_table_row_classes %>"><%= user.email %></td>
           <td class="<%= default_table_row_classes %>"><%= user.sub %></td>

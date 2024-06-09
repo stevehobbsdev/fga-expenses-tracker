@@ -2,7 +2,7 @@
 
 class ExpensesController < ApplicationController
   def index
-    @expenses = @user.expenses
+    @expenses = @authenticated_user.expenses
   end
 
   def new

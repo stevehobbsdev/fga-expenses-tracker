@@ -9,7 +9,7 @@
     <div class="flex items-center">
       
       <div>
-        Logged in as <%= @user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>
+        Logged in as <%= @authenticated_user.name %> | <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>
       </div>
     </div>
   </div>
