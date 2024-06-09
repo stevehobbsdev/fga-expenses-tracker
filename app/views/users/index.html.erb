@@ -6,8 +6,8 @@
       <tr>
         <th class="<%= default_table_header_classes %>">Name</th>
         <th class="<%= default_table_header_classes %>">Email</th>
-        <th class="<%= default_table_header_classes %>">Id</th>
-        <th class="<%= default_table_header_classes %>">Team</th>
+        <th class="<%= default_table_header_classes %>">Auth Id</th>
+        <th class="<%= default_table_header_classes %>">Department</th>
         <th class="<%= default_table_header_classes %>">Manager</th>
       </tr>
       </tr>
@@ -16,7 +16,7 @@
       <% @users.each do |user| %>
         <tr>
           <td class="<%= default_table_row_classes %> font-semibold">
-            <%= user.name %>
+            <%= link_to user.name, edit_user_path(user), class: 'text-blue-500 hover:underline' %>
           </td>
           <td class="<%= default_table_row_classes %>"><%= user.email %></td>
           <td class="<%= default_table_row_classes %>"><%= user.sub %></td>

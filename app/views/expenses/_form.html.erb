@@ -18,9 +18,9 @@
 
     <div class="flex text-right justify-end">
       <% unless @expense.new_record? %>
-        <%= link_to 'Delete', @expense, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'px-2 py-1 mr-1 rounded text-gray-500 bg-gray-100' %>
+        <%= link_to 'Delete', @expense, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'p-2 mr-1 rounded text-gray-500 bg-gray-100' %>
       <% end %>
-      <%= form.submit 'Save', class: 'px-2 py-1 rounded text-white bg-blue-500' %>
+      <%= form.submit 'Save', class: 'p-2 rounded text-white bg-blue-500' %>
     </div>
   <% end %>
 </div>

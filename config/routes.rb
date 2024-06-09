@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :expenses, only: %i[index edit update new create destroy]
-  resources :users
+  resources :users, only: %i[index edit update]
 
   get 'auth/login'
   get 'auth/logout'
