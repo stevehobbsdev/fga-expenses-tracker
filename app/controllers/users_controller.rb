@@ -18,7 +18,6 @@ class UsersController < ApplicationController
   def update
     User.transaction do
       user = User.find(params[:id])
-
       set_user_manager(user_id: user.id, manager_id: user_params[:manager_id])
 
       if user.department_id != user_params[:department_id]

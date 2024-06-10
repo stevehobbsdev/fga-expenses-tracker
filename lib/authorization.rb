@@ -21,12 +21,18 @@ module Authorization
     response = list_objects(user: "user:#{user_id}", relation: 'manager', type: 'user')
     Rails.logger.debug response.parsed_response
 
+    if response.parsed_response['objects'].size == 1 &&
+       response.parsed_response['objects'].first == "user:#{manager_id}"
+      Rails.logger.info 'Skipping set manager for user - already set'
+      return
+    end
+
     response.parsed_response['objects'].each do |object_str|
       # Remove these tuples
       delete_tuple(user: "user:#{user_id}", relation: 'manager', object: object_str)
     end
 
     # Write the actual manager
-    write_tuple(user: "user:#{user_id}", relation: 'manager', object: "user:#{manager_id}")
+    write_tuple(user: "user:#{user_id}", relation: 'manager', object: "user:#{manager_id}") unless manager_id.empty?
   end
 end
