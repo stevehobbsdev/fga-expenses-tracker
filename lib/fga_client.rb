@@ -26,8 +26,7 @@ module FgaClient
 
     Rails.logger.debug data
 
-    response = HTTParty.post(uri(tuple_path), body: data.to_json,
-                                              headers: { 'Content-Type': 'application/json' })
+    response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
 
     raise response['message'] unless response.code == 200
   end
@@ -45,13 +44,31 @@ module FgaClient
 
     Rails.logger.debug data
 
-    response = HTTParty.post(uri(tuple_path), body: data.to_json,
-                                              headers: { 'Content-Type': 'application/json' })
+    response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
 
     raise response['message'] unless response.code == 200
   end
 
+  def list_objects(user:, relation:, type:)
+    data = {
+      type:,
+      relation:,
+      user:
+    }
+
+    Rails.logger.debug data
+    HTTParty.post(uri(list_objects_path), body: data.to_json, headers:)
+  end
+
   private
+
+  def headers
+    { 'Content-Type': 'application/json' }
+  end
+
+  def list_objects_path
+    "#{store_path}/list-objects"
+  end
 
   def tuple_path
     "#{store_path}/write"
