@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ExpensesController < ApplicationController
+  include Authorization
+
   def index
     @expenses = @authenticated_user.expenses
   end
@@ -14,9 +16,14 @@ class ExpensesController < ApplicationController
   end
 
   def create
-    @expense = Expense.new(expense_params)
-    @user.expenses << @expense
-    @user.save
+    Expense.transaction do
+      @expense = Expense.new(expense_params)
+      @expense.user_id = @authenticated_user.id
+      @expense.save
+
+      # Create the relationship in FGA
+      associate_user_to_expense(user_id: @expense.user_id, expense_id: @expense.id)
+    end
 
     if @expense.valid?
       redirect_to expenses_path
