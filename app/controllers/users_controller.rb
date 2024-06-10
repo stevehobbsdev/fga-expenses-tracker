@@ -17,6 +17,15 @@ class UsersController < ApplicationController
 
   def update
     user = User.find(params[:id])
+
+    if user.manager_id != user_params[:manager_id]
+      # Manager has changed - update tuples for manager relationships in FGA
+    end
+
+    if user.department_id != user_params[:department_id]
+      # Department has changed - update tuples for group memberships in FGA
+    end
+
     user.update(user_params)
 
     if user.valid?

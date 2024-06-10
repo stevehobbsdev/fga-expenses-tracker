@@ -1,0 +1,4 @@
+development:
+  domain: <%= ENV.fetch('AUTH0_DOMAIN', nil) %>
+  client_id: <%= ENV.fetch('AUTH0_CLIENT_ID', nil) %>
+  client_secret: <%= ENV.fetch('AUTH0_CLIENT_SECRET', nil) %>

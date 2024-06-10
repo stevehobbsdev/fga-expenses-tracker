@@ -26,5 +26,6 @@ module FgaExpensesApp
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.openfga = config_for(:openfga)
+    config.auth0 = config_for(:auth0)
   end
 end

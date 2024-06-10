@@ -44,9 +44,7 @@ module Authentication
     transaction = JSON.parse(session[:auth_transaction], symbolize_names: true)
     raise 'State mismatch' if transaction[:state] != params[:state]
 
-    client_id = ENV.fetch('AUTH0_CLIENT_ID', nil)
-    client_secret = ENV.fetch('AUTH0_CLIENT_SECRET', nil)
-    domain = ENV.fetch('AUTH0_DOMAIN', nil)
+    Rails.configuration.auth0 => { domain:, client_id:, client_secret: }
 
     # Token
     token_params = {
@@ -82,8 +80,6 @@ module Authentication
     else
       User.create(sub:, email:, name:, id_token:)
     end
-
-    # TODO: Add the user to FGA
 
     # TODO: Make this longer lasting than just session
     session[:user_session] = sub
