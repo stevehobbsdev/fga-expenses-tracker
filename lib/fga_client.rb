@@ -7,7 +7,7 @@ module FgaClient
     HTTParty.get(uri).deep_symbolize_keys
   end
 
-  def delete_store()
+  def delete_store
     uri = uri(store_path(config[:store_id]))
     Rails.logger.debug(uri)
     HTTParty.delete(uri)
@@ -16,6 +16,25 @@ module FgaClient
   def write_tuple(user:, relation:, object:)
     data = {
       writes: {
+        tuple_keys: [{
+          user:,
+          relation:,
+          object:
+        }]
+      }
+    }
+
+    Rails.logger.debug data
+
+    response = HTTParty.post(uri(tuple_path), body: data.to_json,
+                                              headers: { 'Content-Type': 'application/json' })
+
+    raise response['message'] unless response.code == 200
+  end
+
+  def delete_tuple(user:, relation:, object:)
+    data = {
+      deletes: {
         tuple_keys: [{
           user:,
           relation:,

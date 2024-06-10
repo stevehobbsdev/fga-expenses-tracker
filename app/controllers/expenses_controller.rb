@@ -44,7 +44,12 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
-    Expense.delete(params[:id])
+    Expense.transaction do
+      expense = Expense.find(params[:id])
+      expense.delete
+
+      disassociate_user_from_expense(user_id: expense.user_id, expense_id: expense.id)
+    end
     redirect_to expenses_path
   end
 
