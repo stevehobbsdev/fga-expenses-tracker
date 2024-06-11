@@ -60,10 +60,34 @@ module FgaClient
     HTTParty.post(uri(list_objects_path), body: data.to_json, headers:)
   end
 
+  def list_users(relation:, object:, user_filter_type:)
+    type, id = object.split(':')
+
+    data = {
+      object: {
+        type:,
+        id:
+      },
+      relation:,
+      user_filters: [
+        {
+          type: user_filter_type
+        }
+      ]
+    }
+
+    Rails.logger.debug data
+    HTTParty.post(uri(list_users_path), body: data.to_json, headers:)
+  end
+
   private
 
   def headers
     { 'Content-Type': 'application/json' }
+  end
+
+  def list_users_path
+    "#{store_path}/list-users"
   end
 
   def list_objects_path

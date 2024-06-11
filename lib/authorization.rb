@@ -18,18 +18,20 @@ module Authorization
   end
 
   def set_user_manager(user_id:, manager_id:)
-    response = list_objects(user: "user:#{manager_id}", relation: 'manager', type: 'user')
+    response = list_users(relation: 'manager', object: "user:#{user_id}", user_filter_type: 'user')
     Rails.logger.debug response.parsed_response
+    manager_ids = response.parsed_response['users'].map { |u| u['object']['id'] }
 
-    if response.parsed_response['objects'].size == 1 &&
-       response.parsed_response['objects'].first == "user:#{manager_id}"
-      Rails.logger.info 'Skipping set manager for user - already set'
-      return
-    end
+    # Optization: if the user already has the manager set, skip the operation
+    # if response.parsed_response['users'].size == 1 &&
+    #    response.parsed_response['users'].first == "user:#{manager_id}"
+    #   Rails.logger.info 'Skipping set manager for user - already set'
+    #   return
+    # end
 
-    response.parsed_response['objects'].each do |object_str|
-      # Remove these tuples
-      delete_tuple(user: "user:#{manager_id}", relation: 'manager', object: object_str)
+    # A user should only have one manager - clear out any existing ones, then set the new one
+    manager_ids.each do |id|
+      delete_tuple(user: "user:#{id}", relation: 'manager', object: "user:#{user_id}")
     end
 
     # Write the actual manager
