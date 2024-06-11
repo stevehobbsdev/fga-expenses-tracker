@@ -18,7 +18,7 @@ module Authorization
   end
 
   def set_user_manager(user_id:, manager_id:)
-    response = list_objects(user: "user:#{user_id}", relation: 'manager', type: 'user')
+    response = list_objects(user: "user:#{manager_id}", relation: 'manager', type: 'user')
     Rails.logger.debug response.parsed_response
 
     if response.parsed_response['objects'].size == 1 &&
@@ -29,10 +29,10 @@ module Authorization
 
     response.parsed_response['objects'].each do |object_str|
       # Remove these tuples
-      delete_tuple(user: "user:#{user_id}", relation: 'manager', object: object_str)
+      delete_tuple(user: "user:#{manager_id}", relation: 'manager', object: object_str)
     end
 
     # Write the actual manager
-    write_tuple(user: "user:#{user_id}", relation: 'manager', object: "user:#{manager_id}") unless manager_id.empty?
+    write_tuple(user: "user:#{manager_id}", relation: 'manager', object: "user:#{user_id}") unless manager_id.empty?
   end
 end
