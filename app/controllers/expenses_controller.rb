@@ -3,6 +3,8 @@
 class ExpensesController < ApplicationController
   include Authorization
 
+  before_action :check_manager_authz, only: %i[approval_queue approve deny]
+
   def index
     @expenses = @authenticated_user.expenses
   end
@@ -55,15 +57,48 @@ class ExpensesController < ApplicationController
 
   # Displays the approval queue for expenses. Managers only.
   def approval_queue
-    head :unauthorized unless @authenticated_user.role == 'manager'
-    @expenses = Expense.where(id: expense_approvals_for(user_id: @authenticated_user.id))
+    @expenses = Expense.where(
+      id: expense_approvals_for(user_id: @authenticated_user.id),
+      status: :submitted
+    )
   end
 
-  def approve_expense; end
+  def approve
+    expense = Expense.find(params[:id])
+
+    if expense.nil?
+      respond_to do |format|
+        format.html { redirect_to expenses_approve_path, notice: 'Expense not found.' }
+        format.json { render json: { error: 'Expense not found.' }, status: :not_found }
+      end
+    end
+
+    expense.transaction do
+      expense.status = :manager_approved
+      expense.save
+
+      # Add the teams who can approve to this expense in FGA
+      Department.where(expense_approver: true).find_each do |dep|
+        associate_team_to_expense(team_id: dep.id, expense_id: expense.id)
+      end
+    end
+
+    redirect_to expenses_approve_path
+  end
+
+  def deny
+    Expense.update(params[:id], status: :rejected)
+
+    redirect_to expenses_approve_path
+  end
 
   private
 
   def expense_params
     params.require(:expense).permit(:amount, :description)
+  end
+
+  def check_manager_authz
+    head :unauthorized unless @authenticated_user.role == 'manager'
   end
 end

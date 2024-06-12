@@ -2,6 +2,6 @@
 
 class AddCanExpenseToDepartment < ActiveRecord::Migration[7.1]
   def change
-    add_column :departments, :expense_approver, :boolean, default: false
+    add_column :departments, :expense_approver, :boolean, default: false, null: false
   end
 end

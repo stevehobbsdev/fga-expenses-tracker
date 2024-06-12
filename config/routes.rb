@@ -3,7 +3,8 @@
 Rails.application.routes.draw do
   resources :expenses, only: %i[index edit update new create destroy]
   get 'expenses/approve', to: 'expenses#approval_queue'
-  post 'expenses/approve', to: 'expenses#approve'
+  post 'expenses/:id/approve', to: 'expenses#approve', as: :approve_expense
+  post 'expenses/:id/deny', to: 'expenses#deny', as: :deny_expense
 
   resources :users, only: %i[index edit update]
 

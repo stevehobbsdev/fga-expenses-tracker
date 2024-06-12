@@ -9,12 +9,28 @@ module Authorization
                 object: "expense:#{expense_id}")
   end
 
+  def associate_team_to_expense(team_id:, expense_id:)
+    write_tuple(
+      user: "team:#{team_id}#member",
+      relation: :can_approve,
+      object: "expense:#{expense_id}"
+    )
+  end
+
   def disassociate_user_from_expense(user_id:, expense_id:)
     delete_tuple(user: "user:#{user_id}",
                  relation: :owner,
                  object: "expense:#{expense_id}")
 
     # TODO: also remove any relationships to the finance team for this expense
+  end
+
+  def disassociate_team_from_expense(team_id:, expense_id:)
+    delete_tuple(
+      user: "team:#{team_id}#member",
+      relation: :can_approve,
+      object: "expense:#{expense_id}"
+    )
   end
 
   def set_user_manager(user_id:, manager_id:)

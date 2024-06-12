@@ -8,4 +8,17 @@ module ApplicationHelper
   def default_table_header_classes
     'p-3 text-left text-sm font-medium text-gray-500 border-b border-gray-200'
   end
+
+  def expense_status(status)
+    case status
+    when 'submitted'
+      'Submitted'
+    when 'manager_approved'
+      'Approved by manager, pending finance sign-off'
+    when 'approved'
+      'Approved'
+    when 'rejected'
+      'Rejected'
+    end
+  end
 end

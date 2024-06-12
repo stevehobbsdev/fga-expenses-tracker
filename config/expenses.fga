@@ -7,9 +7,9 @@ type user
 
 type team
   relations
-    define members: [user]
+    define member: [user]
 
 type expense
   relations
     define owner: [user]
-    define can_approve: [team#members] or manager from owner
+    define can_approve: [team#member] or manager from owner
