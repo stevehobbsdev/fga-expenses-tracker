@@ -12,4 +12,4 @@ type team
 type expense
   relations
     define owner: [user]
-    define approver: [team#members] or manager from owner
+    define can_approve: [team#members] or manager from owner

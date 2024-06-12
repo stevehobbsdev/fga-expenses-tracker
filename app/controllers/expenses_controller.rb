@@ -53,6 +53,14 @@ class ExpensesController < ApplicationController
     redirect_to expenses_path
   end
 
+  # Displays the approval queue for expenses. Managers only.
+  def approval_queue
+    head :unauthorized unless @authenticated_user.role == 'manager'
+    @expenses = Expense.where(id: expense_approvals_for(user_id: @authenticated_user.id))
+  end
+
+  def approve_expense; end
+
   private
 
   def expense_params

@@ -2,6 +2,9 @@
 
 Rails.application.routes.draw do
   resources :expenses, only: %i[index edit update new create destroy]
+  get 'expenses/approve', to: 'expenses#approval_queue'
+  post 'expenses/approve', to: 'expenses#approve'
+
   resources :users, only: %i[index edit update]
 
   get 'auth/login'

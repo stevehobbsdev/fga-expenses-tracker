@@ -5,20 +5,24 @@ module Authorization
 
   def associate_user_to_expense(user_id:, expense_id:)
     write_tuple(user: "user:#{user_id}",
-                relation: 'owner',
+                relation: :owner,
                 object: "expense:#{expense_id}")
   end
 
   def disassociate_user_from_expense(user_id:, expense_id:)
     delete_tuple(user: "user:#{user_id}",
-                 relation: 'owner',
+                 relation: :owner,
                  object: "expense:#{expense_id}")
 
     # TODO: also remove any relationships to the finance team for this expense
   end
 
   def set_user_manager(user_id:, manager_id:)
-    response = list_users(relation: 'manager', object: "user:#{user_id}", user_filter_type: 'user')
+    # Question: is this deterministic (will I get the same order every time?)
+    # Could be critical when thinking about performance of an IN clause, which is
+    # what this will result in. If the order is derministic, we could reliably
+    # page the results and not have to worry about missing any.
+    response = list_users(object: "user:#{user_id}", user_filter_type: :user, relation: :manager)
     Rails.logger.debug response.parsed_response
     manager_ids = response.parsed_response['users'].map { |u| u['object']['id'] }
 
@@ -31,10 +35,19 @@ module Authorization
 
     # A user should only have one manager - clear out any existing ones, then set the new one
     manager_ids.each do |id|
-      delete_tuple(user: "user:#{id}", relation: 'manager', object: "user:#{user_id}")
+      delete_tuple(user: "user:#{id}", relation: :manager, object: "user:#{user_id}")
     end
 
     # Write the actual manager
-    write_tuple(user: "user:#{manager_id}", relation: 'manager', object: "user:#{user_id}") unless manager_id.empty?
+    write_tuple(user: "user:#{manager_id}", relation: :manager, object: "user:#{user_id}") unless manager_id.empty?
+  end
+
+  def expense_approvals_for(user_id:)
+    response = list_objects(user: "user:#{user_id}", relation: :can_approve, type: :expense)
+    Rails.logger.debug response.parsed_response
+
+    response.parsed_response['objects'].map do |o|
+      o.split(':').last.to_i
+    end
   end
 end

@@ -12,3 +12,6 @@
 %w[Engineering Finance].each do |department|
   Department.create(name: department)
 end
+
+finance = Department.find_by(name: 'Finance')
+finance.update(expense_approver: true)

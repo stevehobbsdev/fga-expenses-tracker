@@ -18,7 +18,7 @@ module FgaClient
       writes: {
         tuple_keys: [{
           user:,
-          relation:,
+          relation: relation.to_s,
           object:
         }]
       }
@@ -36,7 +36,7 @@ module FgaClient
       deletes: {
         tuple_keys: [{
           user:,
-          relation:,
+          relation: relation.to_s,
           object:
         }]
       }
@@ -51,8 +51,8 @@ module FgaClient
 
   def list_objects(user:, relation:, type:)
     data = {
-      type:,
-      relation:,
+      type: type.to_s,
+      relation: relation.to_s,
       user:
     }
 
@@ -65,13 +65,13 @@ module FgaClient
 
     data = {
       object: {
-        type:,
+        type: type.to_s,
         id:
       },
-      relation:,
+      relation: relation.to_s,
       user_filters: [
         {
-          type: user_filter_type
+          type: user_filter_type.to_s
         }
       ]
     }
