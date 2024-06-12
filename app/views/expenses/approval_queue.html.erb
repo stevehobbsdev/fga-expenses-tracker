@@ -26,7 +26,12 @@
             <td class="<%= default_table_row_classes %>"><%= expense.user.name %></td>
             <td class="<%= default_table_row_classes %>"><%= number_to_currency(expense.amount) %></td>
             <td class="<%= default_table_row_classes %>"><%= expense.description %></td>
-            <td class="<%= default_table_row_classes %>"><%= expense_status(expense.status) %></td>
+            <td class="<%= default_table_row_classes %>">
+              <span class="flex items-center">
+                <span class="w-6 mr-2"><%= status_icon(expense.status) %></span>
+                <%= expense_status(expense.status) %></td>
+              </span>
+            </td>
             <td class="<%= default_table_row_classes %>"><%= time_ago_in_words(expense.created_at) %> ago</td>
             <td class="<%= default_table_row_classes %>">
               <% if show_approve_buttons?(expense) %>

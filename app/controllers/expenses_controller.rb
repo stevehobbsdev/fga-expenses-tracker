@@ -98,7 +98,7 @@ class ExpensesController < ApplicationController
       if @authenticated_user.department.expense_approver?
         begin
           disassociate_team_from_expense(team_id: @authenticated_user.department_id, expense_id: expense.id)
-        rescue
+        rescue StandardError
         end
       else
         # Add the teams who can approve to this expense in FGA

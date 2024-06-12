@@ -12,13 +12,26 @@ module ApplicationHelper
   def expense_status(status)
     case status
     when 'submitted'
-      'Submitted'
+      'Submitted, awaiting manager approval'
     when 'manager_approved'
       'Approved by manager, pending finance sign-off'
     when 'approved'
       'Approved'
     when 'rejected'
       'Rejected'
+    end
+  end
+
+  def status_icon(status)
+    case status.to_sym
+    when :submitted
+      content_tag :span, icon('chevron-up'), class: 'text-cyan-600'
+    when :manager_approved
+      content_tag :span, icon('chevron-double-up'), class: 'text-blue-600'
+    when :approved
+      content_tag :span, icon('check-circle'), class: 'text-green-600'
+    when :rejected
+      content_tag :span, icon('x-circle'), class: 'text-red-600'
     end
   end
 

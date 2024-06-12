@@ -2,11 +2,8 @@
 <div class="flex items-center mb-10">
   <h1 class="text-3xl text-gray-500 font-light mr-5">My expenses</h1>
   <div class="p-2 bg-gray-100 text-gray-500 shadow rounded flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-1">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-    </svg>
-
-    <%= link_to 'Create', new_expense_path %>
+    <span class="mr-4 w-3"><%= icon 'plus-circle' %></span>
+    <%= link_to 'Create', new_expense_path, class: 'block' %>
   </div>
 </div>
 
@@ -30,7 +27,11 @@
             <th class="<%= default_table_header_classes %>"><%= expense.id %></th>
             <td class="<%= default_table_row_classes %>"><%= number_to_currency(expense.amount) %></td>
             <td class="<%= default_table_row_classes %>"><%= expense.description %></td>
-            <td class="<%= default_table_row_classes %>"><%= expense_status(expense.status) %></td>
+            <td class="<%= default_table_row_classes %>">
+              <span class="flex items-center">
+                <span class="w-6 mr-2"><%= status_icon(expense.status) %></span>
+                <%= expense_status(expense.status) %></td>
+              </span>
             <td class="<%= default_table_row_classes %>"><%= time_ago_in_words(expense.created_at) %> ago</td>
             <td class="<%= default_table_row_classes %>">
               <%= link_to 'Edit', edit_expense_path(expense.id), class: 'p-2 mr-3 bg-gray-100 text-slate-500 shadow rounded' %>
