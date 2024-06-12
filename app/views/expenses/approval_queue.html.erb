@@ -13,6 +13,7 @@
         <th class="<%= default_table_header_classes %>">Raised by</th>
         <th class="<%= default_table_header_classes %>">Amount</th>
         <th class="<%= default_table_header_classes %>">Description</th>
+        <th class="<%= default_table_header_classes %>">Status</th>
         <th class="<%= default_table_header_classes %>">Created</th>
         <th class="<%= default_table_header_classes %>">Actions</th>
         </tr>
@@ -25,10 +26,13 @@
             <td class="<%= default_table_row_classes %>"><%= expense.user.name %></td>
             <td class="<%= default_table_row_classes %>"><%= number_to_currency(expense.amount) %></td>
             <td class="<%= default_table_row_classes %>"><%= expense.description %></td>
+            <td class="<%= default_table_row_classes %>"><%= expense_status(expense.status) %></td>
             <td class="<%= default_table_row_classes %>"><%= time_ago_in_words(expense.created_at) %> ago</td>
             <td class="<%= default_table_row_classes %>">
-              <%= link_to 'Approve', approve_expense_path(expense.id), data: { turbo_method: :post }, class: 'p-2 mr-3 bg-lime-300 text-lime-700 shadow rounded' %>
-              <%= link_to 'Deny', deny_expense_path(expense.id), data: { turbo_method: :post }, class: 'p-2 mr-3 bg-slate-300 text-slate-700 shadow rounded' %>
+              <% if show_approve_buttons?(expense) %>
+                <%= link_to 'Approve', approve_expense_path(expense.id), data: { turbo_method: :post }, class: 'p-2 mr-3 bg-lime-300 text-lime-700 shadow rounded' %>
+                <%= link_to 'Deny', deny_expense_path(expense.id), data: { turbo_method: :post }, class: 'p-2 mr-3 bg-slate-300 text-slate-700 shadow rounded' %>
+              <% end %>
             </td>
           </tr>
           </tr>

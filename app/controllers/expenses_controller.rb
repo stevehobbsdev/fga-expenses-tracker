@@ -25,6 +25,15 @@ class ExpensesController < ApplicationController
 
       # Create the relationship in FGA
       associate_user_to_expense(user_id: @expense.user_id, expense_id: @expense.id)
+
+      # If this user has no manager, go straight to finance for approval
+      if @authenticated_user.manager_id.nil?
+        Department.where(expense_approver: true).find_each do |dep|
+          associate_team_to_expense(team_id: dep.id, expense_id: @expense.id)
+        end
+
+        @expense.update(status: :manager_approved)
+      end
     end
 
     if @expense.valid?
@@ -59,7 +68,7 @@ class ExpensesController < ApplicationController
   def approval_queue
     @expenses = Expense.where(
       id: expense_approvals_for(user_id: @authenticated_user.id),
-      status: :submitted
+      status: %i[submitted manager_approved]
     )
   end
 
@@ -73,13 +82,29 @@ class ExpensesController < ApplicationController
       end
     end
 
-    expense.transaction do
-      expense.status = :manager_approved
-      expense.save
+    next_status = case expense.status.to_sym
+                  when :submitted
+                    :manager_approved
+                  when :manager_approved
+                    :approved
+                  end
 
-      # Add the teams who can approve to this expense in FGA
-      Department.where(expense_approver: true).find_each do |dep|
-        associate_team_to_expense(team_id: dep.id, expense_id: expense.id)
+    expense.transaction do
+      # Just automatically approve if the user is an expense approver
+      next_status = :approved if @authenticated_user.department.expense_approver?
+      expense.update(status: next_status)
+
+      # If this team can approve expenses, remove the team from the expense in FGA since this is the last stage
+      if @authenticated_user.department.expense_approver?
+        begin
+          disassociate_team_from_expense(team_id: @authenticated_user.department_id, expense_id: expense.id)
+        rescue
+        end
+      else
+        # Add the teams who can approve to this expense in FGA
+        Department.where(expense_approver: true).find_each do |dep|
+          associate_team_to_expense(team_id: dep.id, expense_id: expense.id)
+        end
       end
     end
 
@@ -99,6 +124,6 @@ class ExpensesController < ApplicationController
   end
 
   def check_manager_authz
-    head :unauthorized unless @authenticated_user.role == 'manager'
+    head :unauthorized unless @authenticated_user.role == 'manager' || @authenticated_user.department.expense_approver?
   end
 end

@@ -12,6 +12,6 @@ class ApplicationController < ActionController::Base
     return do_login unless logged_in?
 
     sub = user_session
-    @authenticated_user = User.find_by(sub:)
+    @authenticated_user = User.preload(:department).find_by(sub:)
   end
 end

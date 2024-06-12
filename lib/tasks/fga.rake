@@ -7,9 +7,22 @@ namespace :fga do
     include FgaClient
 
     User.find_each do |user|
-      write_tuple(user: "user:#{user.manager_id}", relation: 'manager', object: "user:#{user.id}") if user.manager_id
-    rescue StandardError
-      Rails.logger.error "Failed to write manager tuple for user: #{user.id}"
+      begin
+        write_tuple(user: "user:#{user.manager_id}", relation: :manager, object: "user:#{user.id}") if user.manager_id
+      rescue StandardError
+        Rails.logger.error "Failed to write manager tuple for user: #{user.id}"
+      end
+
+      # Write the department tuple
+      begin
+        write_tuple(
+          user: "user:#{user.id}",
+          relation: :member,
+          object: "team:#{user.department_id}"
+        )
+      rescue StandardError
+        Rails.logger.error "Failed to write team tuple for user: #{user.id}, team #{user.department_id}"
+      end
     end
 
     Expense.find_each do |expense|

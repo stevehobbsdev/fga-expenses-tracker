@@ -21,4 +21,9 @@ module ApplicationHelper
       'Rejected'
     end
   end
+
+  def show_approve_buttons?(expense)
+    (@authenticated_user.department.expense_approver? && expense.status.to_sym == :manager_approved) ||
+      (@authenticated_user.role.to_sym == :manager && expense.status.to_sym == :submitted)
+  end
 end
