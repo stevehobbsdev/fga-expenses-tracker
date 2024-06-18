@@ -15,7 +15,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_12_145836) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "expense_approver", default: false
+    t.boolean "expense_approver", default: false, null: false
   end
 
   create_table "expenses", force: :cascade do |t|
