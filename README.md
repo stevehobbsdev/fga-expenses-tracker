@@ -25,7 +25,7 @@ rake db:schema:load
 rake db:seed
 ```
 
-### Auth0 credentials
+**Auth0 credentials**
 
 The application integrates with [Auth0](https://auth0.com) for authentication. Provide the application with your Auth0 credentials by copying `.env.example` to a new file called `.env` and providing the values:
 
