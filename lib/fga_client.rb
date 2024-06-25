@@ -80,6 +80,19 @@ module FgaClient
     HTTParty.post(uri(list_users_path), body: data.to_json, headers:)
   end
 
+  def access_token
+    uri = "https://#{config[:issuer]}/oauth/token"
+
+    data = {
+      grant_type: 'client_credentials',
+      client_id: config[:client_id],
+      client_secret: config[:client_secret],
+      audience: config[:audience]
+    }
+
+    HTTParty.post(uri, body: data.to_json, headers:)
+  end
+
   private
 
   def headers
@@ -111,6 +124,6 @@ module FgaClient
   end
 
   def config
-    Rails.configuration.openfga
+    Rails.configuration.fga
   end
 end

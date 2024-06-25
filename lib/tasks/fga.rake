@@ -36,4 +36,9 @@ namespace :fga do
     include FgaClient
     delete_store(Rails.configuration.openfga[:store_id])
   end
+
+  task token: :environment do
+    include FgaClient
+    pp access_token['access_token']
+  end
 end
