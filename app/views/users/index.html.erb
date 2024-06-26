@@ -10,7 +10,6 @@
         <th class="<%= default_table_header_classes %>">Department</th>
         <th class="<%= default_table_header_classes %>">Manager</th>
       </tr>
-      </tr>
     </thead>
     <tbody class="bg-white">
       <% @users.each do |user| %>
@@ -23,7 +22,7 @@
           </td>
           <td class="<%= default_table_row_classes %>"><%= user.email %></td>
           <td class="<%= default_table_row_classes %>"><%= user.sub %></td>
-          <td class="<%= default_table_row_classes %>"><%= user.department.name %></td>
+          <td class="<%= default_table_row_classes %>"><%= user.department&.name || "-" %></td>
           <td class="<%= default_table_row_classes %>"><%= user.manager_id ? @user_memo[user.manager_id].name : '-' %></td>
         </tr>
       <% end %>

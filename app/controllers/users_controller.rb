@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       user = User.find(params[:id])
       set_user_manager(user_id: user.id, manager_id: user_params[:manager_id])
 
-      if user.department_id != user_params[:department_id]
+      if user_params[:department_id] && user.department_id != user_params[:department_id]
         # Department has changed - update tuples for group memberships in FGA
       end
 

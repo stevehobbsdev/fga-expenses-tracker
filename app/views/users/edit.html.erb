@@ -1,5 +1,5 @@
 
-<h1 class="text-3xl text-gray-500"><%= @user.name %></h1>
+<h1 class="text-3xl text-gray-500 mb-10"><%= @user.name %></h1>
 
 <%
   group_class = 'mb-5'
@@ -40,7 +40,7 @@
         <%= form.select(
           :department_id,
           @departments,
-          {},
+          { include_blank: 'No team' },
           class: input_class) %>
       </div>
     </div>

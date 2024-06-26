@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   post 'expenses/:id/deny', to: 'expenses#deny', as: :deny_expense
 
   resources :users, only: %i[index edit update]
+  resources :teams
 
   get 'auth/login'
   get 'auth/logout'

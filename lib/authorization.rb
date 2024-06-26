@@ -40,7 +40,7 @@ module Authorization
     # page the results and not have to worry about missing any.
     response = list_users(object: "user:#{user_id}", user_filter_type: :user, relation: :manager)
     Rails.logger.debug response.parsed_response
-    manager_ids = response.parsed_response['users'].map { |u| u['object']['id'] }
+    manager_ids = response.parsed_response['users']&.map { |u| u['object']['id'] } || []
 
     # Optization: if the user already has the manager set, skip the operation
     # if response.parsed_response['users'].size == 1 &&
