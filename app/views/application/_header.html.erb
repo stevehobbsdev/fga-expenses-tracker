@@ -3,7 +3,7 @@
     <div class="grow flex">
       <h1><%= link_to 'WorkNight', root_path, class: 'font-bold mr-5' %></h1>
       <span class="mr-5 font-bold">|</span>
-      <% if @authenticated_user.role == 'manager' || @authenticated_user.department&.expense_approver? %>
+      <% if @authenticated_user.role == 'manager' || @authenticated_user.team&.expense_approver? %>
         <%= link_to 'Approval queue', expenses_approve_path, class: 'block mr-3' %>
       <% end %>
       <%= link_to 'My expenses', expenses_path, class: 'block mr-3' %>
@@ -14,7 +14,7 @@
       <div class="flex">
         <div class="mr-5 flex flex-col">
           <div>Logged in as <%= @authenticated_user.name %></div>
-          <div class="text-right text-xs text-slate-400 uppercase"><%= @authenticated_user.department&.name %></div>
+          <div class="text-right text-xs text-slate-400 uppercase"><%= @authenticated_user.team&.name %></div>
         </div>
         <div>
           <%= link_to 'logout', auth_logout_path, data: { turbo_prefetch: false, turbo: false } %>

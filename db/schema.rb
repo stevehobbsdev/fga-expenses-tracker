@@ -10,14 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_12_145836) do
-  create_table "departments", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "expense_approver", default: false, null: false
-  end
-
+ActiveRecord::Schema[7.1].define(version: 2024_06_26_161523) do
   create_table "expenses", force: :cascade do |t|
     t.float "amount"
     t.text "description"
@@ -26,6 +19,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_12_145836) do
     t.integer "user_id", null: false
     t.integer "status", default: 0, null: false
     t.index ["user_id"], name: "index_expenses_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "expense_approver", default: false, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -37,13 +37,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_12_145836) do
     t.string "id_token"
     t.integer "manager_id"
     t.string "role"
-    t.integer "department_id"
-    t.index ["department_id"], name: "index_users_on_department_id"
+    t.integer "team_id"
     t.index ["manager_id"], name: "index_users_on_manager_id"
     t.index ["sub"], name: "index_users_on_sub", unique: true
+    t.index ["team_id"], name: "index_users_on_team_id"
   end
 
   add_foreign_key "expenses", "users"
-  add_foreign_key "users", "departments"
   add_foreign_key "users", "users", column: "manager_id"
 end

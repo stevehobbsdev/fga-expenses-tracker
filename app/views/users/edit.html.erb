@@ -36,10 +36,10 @@
           class: input_class) %>
       </div>
       <div class="<%= group_class %> flex flex-col">
-        <%= form.label :department, 'Department', class: label_class %>
+        <%= form.label :team, 'Team', class: label_class %>
         <%= form.select(
-          :department_id,
-          @departments,
+          :team_id,
+          @teams,
           { include_blank: 'No team' },
           class: input_class) %>
       </div>

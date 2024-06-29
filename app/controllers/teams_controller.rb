@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class TeamsController < ApplicationController
   def index
-    @teams = Department.order(:name)
+    @teams = Team.order(:name)
   end
 
   def edit
-    @team = Department.find(params[:id])
+    @team = Team.find(params[:id])
   end
 end

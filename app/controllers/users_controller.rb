@@ -9,10 +9,10 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     @managers = User.where(role: 'manager')
-                    .filter { |m| m.id != @user.id && m.department_id == @user.department_id }
+                    .filter { |m| m.id != @user.id && m.team_id == @user.team_id }
                     .collect { |m| [m.name, m.id] }
 
-    @departments = Department.all.collect { |d| [d.name, d.id] }
+    @teams = Team.all.collect { |d| [d.name, d.id] }
   end
 
   def update
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       user = User.find(params[:id])
       set_user_manager(user_id: user.id, manager_id: user_params[:manager_id])
 
-      if user_params[:department_id] && user.department_id != user_params[:department_id]
+      if user_params[:team_id] && user.team_id != user_params[:team_id]
         # Department has changed - update tuples for group memberships in FGA
       end
 
@@ -36,6 +36,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :role, :manager_id, :department_id)
+    params.require(:user).permit(:name, :role, :manager_id, :team_id)
   end
 end
