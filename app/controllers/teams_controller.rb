@@ -13,6 +13,14 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
   end
 
+  def create
+    @team = Team.create(team_params)
+
+    # Adjust FGA tuples depending on the value of :expense_approver
+
+    redirect_to action: :index if @team.valid?
+  end
+
   def update
     @team = Team.find(params[:id])
     @team.update(team_params)
@@ -20,6 +28,14 @@ class TeamsController < ApplicationController
     # Adjust FGA tuples depending on the value of :expense_approver
 
     redirect_to action: :index if @team.valid?
+  end
+
+  def destroy
+    Team.delete(params[:id])
+
+    # Adjust FGA tuples depending on the value of :expense_approver
+
+    redirect_to action: :index
   end
 
   private
