@@ -1,0 +1,25 @@
+<%
+  group_class = 'mb-5'
+  label_class = 'font-semibold text-sm mb-2'
+  input_class = 'p-2 rounded border-gray-200 border text-gray-500'
+%>
+
+<%= form_with model: @team do |form| %>
+  <div class="flex flex-col mb-5">
+    <div class="<%= group_class %> flex flex-col">
+      <%= form.label :name, 'Name', class: label_class %>
+      <%= form.text_field :name, class: input_class %>
+    </div>
+  </div>
+
+  <h3 class="mb-5">Roles</h3>
+
+  <div class="flex items-center">
+    <%= form.check_box :expense_approver, class: 'mr-3' %>
+    <%= form.label :expense_approver, 'Expense approver', class: "font-normal text-sm" %>
+  </div>
+
+  <div class="flex text-right justify-end border-t border-gray-200 mt-5 pt-5">
+    <%= form.submit 'Save', class: 'p-2 rounded text-white bg-blue-500' %>
+  </div>
+<% end %>
