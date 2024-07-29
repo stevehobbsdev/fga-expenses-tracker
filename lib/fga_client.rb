@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module FgaClient
+module FgaClient # rubocop:disable Metrics/ModuleLength
   def stores
     uri = uri('/stores')
     Rails.logger.debug(uri)
@@ -27,6 +27,8 @@ module FgaClient
     Rails.logger.debug data
 
     response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
+
+    response = post(uri(tuple_path), data)
 
     raise response['message'] unless response.code == 200
   end
@@ -94,6 +96,13 @@ module FgaClient
   end
 
   private
+
+  def post(uri, data)
+    @access_token ||= access_token['access_token']
+    h = headers.merge('Authorization', "Bearer #{@access_token}")
+
+    HTTParty.post(uri, body: data.to_json, headers: h)
+  end
 
   def headers
     { 'Content-Type': 'application/json' }

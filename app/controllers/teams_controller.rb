@@ -17,6 +17,7 @@ class TeamsController < ApplicationController
     @team = Team.create(team_params)
 
     # Adjust FGA tuples depending on the value of :expense_approver
+    # - add this team to all expenses as approver
 
     redirect_to action: :index if @team.valid?
   end
@@ -26,6 +27,8 @@ class TeamsController < ApplicationController
     @team.update(team_params)
 
     # Adjust FGA tuples depending on the value of :expense_approver
+    # - if value has changed (now true) add to all expenses
+    # - if value has changed (now false) remove from all expenses
 
     redirect_to action: :index if @team.valid?
   end
