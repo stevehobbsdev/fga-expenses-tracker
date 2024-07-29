@@ -6,7 +6,7 @@ class ExpensesController < ApplicationController
   before_action :check_manager_authz, only: %i[approval_queue approve deny]
 
   def index
-    @expenses = @authenticated_user.expenses
+    @expenses = @authenticated_user&.expenses || []
   end
 
   def new
@@ -28,7 +28,7 @@ class ExpensesController < ApplicationController
 
       # If this user has no manager, go straight to finance for approval
       if @authenticated_user.manager_id.nil?
-        Department.where(expense_approver: true).find_each do |dep|
+        Team.where(expense_approver: true).find_each do |dep|
           associate_team_to_expense(team_id: dep.id, expense_id: @expense.id)
         end
 
@@ -91,18 +91,18 @@ class ExpensesController < ApplicationController
 
     expense.transaction do
       # Just automatically approve if the user is an expense approver
-      next_status = :approved if @authenticated_user.department.expense_approver?
+      next_status = :approved if @authenticated_user.team.expense_approver?
       expense.update(status: next_status)
 
       # If this team can approve expenses, remove the team from the expense in FGA since this is the last stage
-      if @authenticated_user.department.expense_approver?
+      if @authenticated_user.team.expense_approver?
         begin
-          disassociate_team_from_expense(team_id: @authenticated_user.department_id, expense_id: expense.id)
+          disassociate_team_from_expense(team_id: @authenticated_user.team_id, expense_id: expense.id)
         rescue StandardError
         end
       else
         # Add the teams who can approve to this expense in FGA
-        Department.where(expense_approver: true).find_each do |dep|
+        Team.where(expense_approver: true).find_each do |dep|
           associate_team_to_expense(team_id: dep.id, expense_id: expense.id)
         end
       end
@@ -124,6 +124,6 @@ class ExpensesController < ApplicationController
   end
 
   def check_manager_authz
-    head :unauthorized unless @authenticated_user.role == 'manager' || @authenticated_user.department.expense_approver?
+    head :unauthorized unless @authenticated_user.role == 'manager' || @authenticated_user.team.expense_approver?
   end
 end

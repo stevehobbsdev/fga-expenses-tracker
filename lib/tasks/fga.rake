@@ -18,10 +18,10 @@ namespace :fga do
         write_tuple(
           user: "user:#{user.id}",
           relation: :member,
-          object: "team:#{user.department_id}"
+          object: "team:#{user.team_id}"
         )
       rescue StandardError
-        Rails.logger.error "Failed to write team tuple for user: #{user.id}, team #{user.department_id}"
+        Rails.logger.error "Failed to write team tuple for user: #{user.id}, team #{user.team_id}"
       end
     end
 

@@ -26,7 +26,7 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
 
     Rails.logger.debug data
 
-    response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
+    # response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
 
     response = post(uri(tuple_path), data)
 
@@ -98,8 +98,12 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
   private
 
   def post(uri, data)
-    @access_token ||= access_token['access_token']
-    h = headers.merge('Authorization', "Bearer #{@access_token}")
+    h = headers
+
+    if config[:issuer]
+      @access_token ||= access_token['access_token']
+      h = h.merge('Authorization', "Bearer #{@access_token}")
+    end
 
     HTTParty.post(uri, body: data.to_json, headers: h)
   end

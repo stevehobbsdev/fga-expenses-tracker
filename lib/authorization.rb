@@ -17,6 +17,21 @@ module Authorization
     )
   end
 
+  def remove_user_from_team(user_id:, team_id:)
+    delete_tuple(user: "user:#{user_id}",
+                 relation: :member,
+                 object: "team:#{team_id}")
+  rescue StandardError => _e # rubocop:disable Lint/SuppressedException
+  end
+
+  def associate_user_to_team(user_id:, team_id:)
+    write_tuple(
+      user: "user:#{user_id}",
+      relation: :member,
+      object: "team:#{team_id}"
+    )
+  end
+
   def disassociate_user_from_expense(user_id:, expense_id:)
     delete_tuple(user: "user:#{user_id}",
                  relation: :owner,

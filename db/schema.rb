@@ -44,5 +44,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_26_161523) do
   end
 
   add_foreign_key "expenses", "users"
+  add_foreign_key "users", "teams"
   add_foreign_key "users", "users", column: "manager_id"
 end

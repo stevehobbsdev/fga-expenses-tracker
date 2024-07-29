@@ -20,8 +20,10 @@ class UsersController < ApplicationController
       user = User.find(params[:id])
       set_user_manager(user_id: user.id, manager_id: user_params[:manager_id])
 
-      if user_params[:team_id] && user.team_id != user_params[:team_id]
+      if user_params[:team_id] && user.team_id != user_params[:team_id].to_i
         # Department has changed - update tuples for group memberships in FGA
+        remove_user_from_team(user_id: user.id, team_id: user.team_id)
+        associate_user_to_team(user_id: user.id, team_id: user_params[:team_id])
       end
 
       user.update(user_params)
