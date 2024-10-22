@@ -8,7 +8,7 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
   end
 
   def delete_store
-    uri = uri(store_path(config[:store_id]))
+    uri = uri(store_path)
     Rails.logger.debug(uri)
     HTTParty.delete(uri)
   end
@@ -25,8 +25,6 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
     }
 
     Rails.logger.debug data
-
-    # response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
 
     response = post(uri(tuple_path), data)
 
@@ -46,7 +44,7 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
 
     Rails.logger.debug data
 
-    response = HTTParty.post(uri(tuple_path), body: data.to_json, headers:)
+    response = post(uri(tuple_path), data)
 
     raise response['message'] unless response.code == 200
   end
@@ -59,11 +57,13 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
     }
 
     Rails.logger.debug data
-    HTTParty.post(uri(list_objects_path), body: data.to_json, headers:)
+    post(uri(list_objects_path), data)
   end
 
   def list_users(relation:, object:, user_filter_type:)
     type, id = object.split(':')
+
+    user_filters = user_filter_type.is_a?(Array) ? user_filter_type : [{ type: user_filter_type }]
 
     data = {
       object: {
@@ -71,15 +71,11 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
         id:
       },
       relation: relation.to_s,
-      user_filters: [
-        {
-          type: user_filter_type.to_s
-        }
-      ]
+      user_filters:
     }
 
     Rails.logger.debug data
-    HTTParty.post(uri(list_users_path), body: data.to_json, headers:)
+    post(uri(list_users_path), data)
   end
 
   def access_token
@@ -92,20 +88,26 @@ module FgaClient # rubocop:disable Metrics/ModuleLength
       audience: config[:audience]
     }
 
-    HTTParty.post(uri, body: data.to_json, headers:)
+    result = HTTParty.post(uri, body: data.to_json, headers:)
+    Rails.logger.debug(result)
+    result
   end
 
   private
 
   def post(uri, data)
+    make_request(:post, uri, data)
+  end
+
+  def make_request(method, uri, data)
     h = headers
 
-    if config[:issuer]
+    unless config[:openFga]
       @access_token ||= access_token['access_token']
-      h = h.merge('Authorization', "Bearer #{@access_token}")
+      h = h.merge({Authorization: "Bearer #{@access_token}"})
     end
 
-    HTTParty.post(uri, body: data.to_json, headers: h)
+    HTTParty.send(method, uri, body: data.to_json, headers: h)
   end
 
   def headers
