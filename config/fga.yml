@@ -5,4 +5,5 @@ development:
   client_id: <%= ENV.fetch('FGA_CLIENT_ID', nil) %>
   client_secret: <%= ENV.fetch('FGA_CLIENT_SECRET', nil) %>
   issuer: <%= ENV.fetch('FGA_TOKEN_ISSUER', nil) %>
-  audience: <%= ENV.fetch('FGA_TOKEN_AUDIENCE', nil) %>
+  audience: <%= ENV.fetch('FGA_API_AUDIENCE', nil) %>
+  openFga: false
