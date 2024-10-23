@@ -36,8 +36,6 @@ module Authorization
     delete_tuple(user: "user:#{user_id}",
                  relation: :owner,
                  object: "expense:#{expense_id}")
-
-    # TODO: also remove any relationships to the finance team for this expense
   end
 
   def disassociate_team_from_expense(team_id:, expense_id:)
@@ -46,6 +44,31 @@ module Authorization
       relation: :can_approve,
       object: "expense:#{expense_id}"
     )
+  end
+
+  def remove_expense(expense_id:)
+    # Remove the expense from the user
+    user_response = list_users(object: "expense:#{expense_id}", user_filter_type: :user, relation: :owner)
+    user_ids = user_response.parsed_response['users']&.map { |u| u['object']['id'] } || []
+
+    user_ids.each do |id|
+      delete_tuple(user: "user:#{id}", relation: :owner, object: "expense:#{expense_id}")
+    end
+
+    # Remove from any teams that might approve this expense
+    team_filter = {
+      type: 'team',
+      relation: 'member'
+    }
+
+    response = list_users(object: "expense:#{expense_id}", user_filter_type: [team_filter], relation: 'can_approve')
+
+    response.parsed_response['users']&.each { |u|
+      userset = u['userset']
+      delete_tuple(user: "team:#{userset['id']}#member", relation: :can_approve, object: "expense:#{expense_id}")
+    } || []
+
+    Rails.logger.debug(response.parsed_response)
   end
 
   def set_user_manager(user_id:, manager_id:)

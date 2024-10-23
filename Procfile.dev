@@ -1,4 +1,4 @@
-web: env RUBY_DEBUG_OPEN=true bin/rails server
+web: env RUBY_DEBUG_OPEN=true bin/rails server -b localhost
 js: yarn build --watch
 css: yarn build:css --watch
 # openfga: docker run -it -p 3000:3000 -p 8080:8080 openfga/openfga run

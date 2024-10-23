@@ -9,9 +9,27 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-%w[Engineering Finance].each do |department|
-  Department.create(name: department)
+%w[Engineering Finance].each do |team|
+  Team.create(name: team)
 end
 
-finance = Department.find_by(name: 'Finance')
+finance = Team.find_by(name: 'Finance')
 finance.update(expense_approver: true)
+
+engineering = Team.find_by(name: 'Engineering')
+
+# Users
+User.create(
+  name: 'Ernie Engineer',
+  sub: 'custom|1',
+  email: 'steve.hobbs+engineer@hey.com',
+  team: engineering
+)
+
+User.create(
+  name: 'Mandy Manager',
+  sub: 'custom|2',
+  email: 'steve.hobbs+manager@hey.com',
+  team: engineering,
+  role: 'manager'
+)

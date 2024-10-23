@@ -34,11 +34,25 @@ namespace :fga do
 
   task clean: :environment do
     include FgaClient
-    delete_store(Rails.configuration.openfga[:store_id])
+    delete_store
+
+    User.destroy_all
+    Team.destroy_all
+    Expense.destroy_all
   end
 
   task token: :environment do
     include FgaClient
-    pp access_token['access_token']
+    token = access_token
+
+    if token['error']
+      pp token['error_description']
+    else
+      pp token['access_token']
+    end
+  end
+
+  task debug: :environment do
+    sh "fga store export --store-id=#{Rails.configuration.fga.store_id}"
   end
 end

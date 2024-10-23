@@ -59,7 +59,8 @@ class ExpensesController < ApplicationController
       expense = Expense.find(params[:id])
       expense.delete
 
-      disassociate_user_from_expense(user_id: expense.user_id, expense_id: expense.id)
+      # Remove from the FGA store
+      remove_expense(expense_id: expense.id)
     end
     redirect_to expenses_path
   end
